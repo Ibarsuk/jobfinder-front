@@ -1,0 +1,14 @@
+$mobile: 575px
+$small-tablet: 576px
+$tablet: 768px
+$small-desktop: 992px
+$desktop: 1200px
+$large-desktop: 1400px
+
+@mixin mobile
+	@media only screen and (max-width: $mobile)
+		@content
+
+@mixin tablet
+	@media only screen and (max-width: ($small-desktop - 1px))
+		@content
