@@ -1,6 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import userReducer from './user';
+import candidates from './candidates';
+import user from './user';
 
 export default combineReducers({
-	auth: userReducer,
+	user,
+	candidates,
 });

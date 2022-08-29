@@ -2,12 +2,16 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
+import { getCandidates, getCurrentCandidate } from 'redux/stores/candidates';
 import { addToken, getToken } from 'redux/stores/user';
 import styles from '../styles/Home.module.css';
 
 export default function Home() {
 	const dispatch = useDispatch();
 	const token = useSelector(getToken);
+	const currentCandidate = useSelector(getCurrentCandidate);
+	const candidates = useSelector(getCandidates);
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -24,6 +28,10 @@ export default function Home() {
 				<p className={styles.description}>
 					Get started by editing <code className={styles.code}>pages/index.js</code>
 				</p>
+
+				<p>{currentCandidate && currentCandidate.id}</p>
+
+				<p>{candidates && candidates[0].id}</p>
 
 				<button onClick={() => dispatch(addToken('12345'))}>+++</button>
 				<Link href={'/check'}>----</Link>
