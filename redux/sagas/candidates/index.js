@@ -4,7 +4,7 @@ import apiRoutes from 'utils/apiRoutes';
 import { assignCandidates, assignCurrentCandidate } from 'redux/stores/candidates';
 import Action from './actions';
 
-function* getCandidateSaga(action) {
+function* fetchCandidateSaga(action) {
 	const api = yield getContext('api');
 	try {
 		const res = yield call(api.get(`${apiRoutes.candidates}/${action.payload}`));
@@ -14,7 +14,7 @@ function* getCandidateSaga(action) {
 	}
 }
 
-function* getCandidatesSaga() {
+function* fetchCandidatesSaga() {
 	const api = yield getContext('api');
 	try {
 		const res = yield call(api.get(`${apiRoutes.candidates}`));
@@ -25,7 +25,7 @@ function* getCandidatesSaga() {
 }
 
 function* candidatesSaga() {
-	yield all([takeLatest(Action.GET_CANDIDATE, getCandidateSaga), takeLatest(Action.GET_CANDIDATES, getCandidatesSaga)]);
+	yield all([takeLatest(Action.FETCH_CANDIDATE, fetchCandidateSaga), takeLatest(Action.FETCH_CANDIDATES, fetchCandidatesSaga)]);
 }
 
 export default candidatesSaga;

@@ -5,7 +5,7 @@ import { addToken, getToken } from 'redux/stores/user';
 import { StatusCode } from './const';
 
 const TIMEOUT = 10000;
-const URL = `http://${process.env.API_HOST}:${process.env.API_PORT}/api`;
+const URL = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/api/`;
 
 const api = axios.create({
 	baseURL: URL,
