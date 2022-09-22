@@ -1,7 +1,3 @@
-const Action = {
-	AUTH: `AUTH`,
-};
+import { AsyncAction } from 'redux/actions';
 
-export const auth = () => ({ type: Action.AUTH });
-
-export default Action;
+export const auth = payload => ({ type: AsyncAction.AUTH, payload });

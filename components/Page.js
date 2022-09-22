@@ -6,7 +6,12 @@ import routes from 'utils/routes';
 import LocalStorage from 'utils/localStorage';
 import { useSelector } from 'react-redux';
 import { getToken } from 'redux/stores/user';
-import { PrivateType } from 'utils/const';
+
+export const PrivateType = {
+	PUBLIC: `PUBLIC`,
+	PRIVATE: `PRIVATE`,
+	PRIVATE_AUTH: `PRIVATE_AUTH`,
+};
 
 const Page = ({
 	title = 'Название',

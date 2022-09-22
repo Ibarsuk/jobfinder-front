@@ -9,8 +9,9 @@ export const StatusCode = {
 	INTERNAL_SERVER_ERROR: 500,
 };
 
-export const PrivateType = {
-	PUBLIC: `PUBLIC`,
-	PRIVATE: `PRIVATE`,
-	PRIVATE_AUTH: `PRIVATE_AUTH`,
+export const RequestStatus = {
+	IDLE: `IDLE`,
+	LOADING: `LOADING`,
+	SUCCESS: `SUCCESS`,
+	FAILED: `FAILED`,
 };
