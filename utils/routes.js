@@ -3,4 +3,7 @@ export default {
 	auth: {
 		index: `/auth`,
 	},
+	user: {
+		index: `/user`,
+	},
 };

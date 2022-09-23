@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from 'redux/store';
 
-import { addToken, getToken } from 'redux/stores/user';
+import { addToken, getAccessToken, getRefreshToken } from 'redux/stores/user';
 import { StatusCode } from './const';
 
 const TIMEOUT = 10000;
@@ -13,7 +13,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-	config.headers.authorization = `Bearer ${getToken(store.getState())}`;
+	config.headers.authorization = `Bearer ${getAccessToken(store.getState())}`;
 	return config;
 });
 
@@ -21,7 +21,7 @@ api.interceptors.response.use(
 	async res => {
 		if (res.status === StatusCode.TOKEN_REFRESH) {
 			try {
-				const { tokens, user } = await api.post('/refresh', getToken(store.getState()));
+				const { tokens, user } = await api.post('/refresh', getRefreshToken(store.getState()));
 				store.dispatch(addToken(tokens));
 				return api.request(res.config);
 			} catch (e) {

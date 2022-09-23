@@ -1,5 +1,6 @@
 export const AsyncAction = {
 	AUTH: `AUTH`,
+	LOGOUT: `LOGOUT`,
 };
 
 export const Action = {

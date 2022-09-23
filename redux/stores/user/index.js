@@ -6,11 +6,18 @@ const initialState = {
 		access: null,
 		refresh: null,
 	},
+	isAuthChecked: false,
 	authRequest: {
 		status: RequestStatus.IDLE,
 		error: null,
 	},
-	user: null,
+	user: {
+		id: null,
+		firstName: null,
+		lastName: null,
+		age: null,
+		email: null,
+	},
 };
 
 const userSlice = createSlice({
@@ -18,8 +25,10 @@ const userSlice = createSlice({
 	initialState,
 	reducers: {
 		initState(state, action) {
-			state.tokens = action.payload.tokens;
-			state.user = action.payload.user;
+			state.tokens.access = action.payload.tokens?.access;
+			state.tokens.refresh = action.payload.tokens?.refresh;
+			state.user = { ...initialState.user, ...action.payload.user };
+			state.isAuthChecked = true;
 		},
 
 		startAuth(state) {
@@ -36,9 +45,14 @@ const userSlice = createSlice({
 			state.tokens = action.payload.tokens;
 			state.user = action.payload.user;
 		},
+
+		logout(state) {
+			state.user = initialState.user;
+			state.tokens = initialState.tokens;
+		},
 	},
 });
 
 export * from './selectors';
-export const { startAuth, failAuth, successAuth, initState } = userSlice.actions;
+export const { startAuth, failAuth, successAuth, initState, logout } = userSlice.actions;
 export default userSlice.reducer;

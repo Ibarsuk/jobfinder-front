@@ -5,7 +5,8 @@ import Head from 'next/head';
 import routes from 'utils/routes';
 import LocalStorage from 'utils/localStorage';
 import { useSelector } from 'react-redux';
-import { getToken } from 'redux/stores/user';
+import { getAccessToken, getIfAuthChecked } from 'redux/stores/user';
+import Header from './Header/Header';
 
 export const PrivateType = {
 	PUBLIC: `PUBLIC`,
@@ -27,19 +28,29 @@ const Page = ({
 	privateType = PrivateType.PUBLIC,
 }) => {
 	const router = useRouter();
-	const authToken = useSelector(getToken);
+	const token = useSelector(getAccessToken);
+	const isAuthChecked = useSelector(getIfAuthChecked);
+
 	useEffect(() => {
 		switch (privateType) {
 			case PrivateType.PRIVATE:
-				if (!authToken && !LocalStorage.read('token')) router.push(routes.auth.index);
+				if (!token && !LocalStorage.read('token')) router.push(routes.auth.index);
 				break;
 			case PrivateType.PRIVATE_AUTH:
-				if (authToken) router.push(routes.home);
+				if (token) router.push(routes.home);
 				break;
 			default:
 				break;
 		}
-	}, [privateType, authToken, router]);
+	}, [privateType, token, router]);
+
+	if (
+		!isAuthChecked ||
+		(privateType === PrivateType.PRIVATE && !token) ||
+		(privateType === PrivateType.PRIVATE_AUTH && token)
+	) {
+		return null;
+	}
 
 	return (
 		<>
@@ -76,9 +87,9 @@ const Page = ({
 
 				<meta name="theme-color" content="#ffffff" />
 			</Head>
-			{
-				// header
-			}
+
+			<Header />
+
 			<main className={className} style={style}>
 				{component ? React.createElement(component, [], children) : children}
 			</main>

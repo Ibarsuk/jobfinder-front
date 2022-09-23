@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAuthRequest } from 'redux/stores/user';
 import { RequestStatus } from 'utils/const';
 import { auth } from 'redux/sagas/user/actions';
+import { useEffect } from 'react';
 
 const authSchema = yup.object().shape({
 	email: yup.string().email().required(),
@@ -32,6 +33,12 @@ const Auth = () => {
 			dispath(auth(values));
 		},
 	});
+
+	useEffect(() => {
+		if (authRequest.status !== RequestStatus.LOADING) {
+			formik.setSubmitting(false);
+		}
+	}, [authRequest]);
 
 	return (
 		<Page title="Авторизация" privateType={PrivateType.PRIVATE_AUTH}>
