@@ -1,7 +1,7 @@
 import { all, call, put, getContext, takeLatest } from 'redux-saga/effects';
 
 import apiRoutes from 'utils/apiRoutes';
-import { assignCandidates, assignCurrentCandidate } from 'redux/stores/candidates';
+import { assignCurrentCandidate, failCandidatesFetching, succesCandidatesFetching } from 'redux/stores/candidates';
 import Action from './actions';
 
 function* fetchCandidateSaga(action) {
@@ -18,9 +18,9 @@ function* fetchCandidatesSaga() {
 	const api = yield getContext('api');
 	try {
 		const res = yield call(api.get(`${apiRoutes.candidates}`));
-		yield put(assignCandidates(res.data));
+		yield put(succesCandidatesFetching(res.data));
 	} catch (e) {
-		yield put(assignCandidates(null));
+		yield put(failCandidatesFetching(e.response.data.message));
 	}
 }
 

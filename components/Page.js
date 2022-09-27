@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 import routes from 'utils/routes';
-import LocalStorage from 'utils/localStorage';
 import { useSelector } from 'react-redux';
 import { getAccessToken, getIfAuthChecked } from 'redux/stores/user';
 import Header from './Header/Header';

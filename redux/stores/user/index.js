@@ -33,6 +33,7 @@ const userSlice = createSlice({
 
 		startAuth(state) {
 			state.authRequest.status = RequestStatus.LOADING;
+			state.authRequest.error = null;
 		},
 
 		failAuth(state, action) {
@@ -42,6 +43,7 @@ const userSlice = createSlice({
 
 		successAuth(state, action) {
 			state.authRequest.status = RequestStatus.SUCCESS;
+			state.authRequest.error = null;
 			state.tokens = action.payload.tokens;
 			state.user = action.payload.user;
 		},
