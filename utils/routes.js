@@ -6,4 +6,7 @@ export default {
 	user: {
 		index: `/user`,
 	},
+	candidates: {
+		index: `/candidates`,
+	},
 };

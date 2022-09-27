@@ -38,6 +38,9 @@ const Header = () => {
 							<Nav.Item>
 								<Link href={routes.user.index}>User</Link>
 							</Nav.Item>
+							<Nav.Item>
+								<Link href={routes.candidates.index}>Candidates</Link>
+							</Nav.Item>
 						</>
 					)}
 				</Nav>

@@ -34,7 +34,7 @@ const Page = ({
 	useEffect(() => {
 		switch (privateType) {
 			case PrivateType.PRIVATE:
-				if (!token && !LocalStorage.read('token')) router.push(routes.auth.index);
+				if (!token && isAuthChecked) router.push(routes.auth.index);
 				break;
 			case PrivateType.PRIVATE_AUTH:
 				if (token) router.push(routes.home);
@@ -42,7 +42,7 @@ const Page = ({
 			default:
 				break;
 		}
-	}, [privateType, token, router]);
+	}, [privateType, token, router, isAuthChecked]);
 
 	if (
 		!isAuthChecked ||

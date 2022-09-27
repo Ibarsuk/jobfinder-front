@@ -3,7 +3,7 @@ import { Action } from 'redux/globalActions';
 
 export default state => next => action => {
 	if (action.type === Action.REDIRECT) {
-		Router.push(`/`);
+		Router.push(action.payload);
 	}
 	next(action);
 };
