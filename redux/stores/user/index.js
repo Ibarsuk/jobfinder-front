@@ -52,9 +52,14 @@ const userSlice = createSlice({
 			state.user = initialState.user;
 			state.tokens = initialState.tokens;
 		},
+
+		refreshTokes(state, action) {
+			state.tokens = action.payload.tokens;
+			state.user = action.payload.user;
+		},
 	},
 });
 
 export * from './selectors';
-export const { startAuth, failAuth, successAuth, initState, logout } = userSlice.actions;
+export const { startAuth, failAuth, successAuth, initState, logout, refreshTokes } = userSlice.actions;
 export default userSlice.reducer;

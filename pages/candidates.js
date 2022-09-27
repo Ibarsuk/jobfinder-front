@@ -1,7 +1,8 @@
 import Page, { PrivateType } from 'components/Page';
-import Link from 'next/link';
+import { useCallback } from 'react';
+import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCandidate, fetchCandidates } from 'redux/sagas/candidates/actions';
+import { fetchCandidates } from 'redux/sagas/candidates/actions';
 import { getCandidates, getCurrentCandidate } from 'redux/stores/candidates';
 import styles from '../styles/Home.module.css';
 
@@ -10,16 +11,17 @@ const Candidates = () => {
 	const currentCandidate = useSelector(getCurrentCandidate);
 	const candidates = useSelector(getCandidates);
 
+	const handleFetchCandidates = useCallback(() => {
+		dispatch(fetchCandidates());
+	}, []);
+
 	return (
 		<Page privateType={PrivateType.PRIVATE} title="Соискатели">
-			<button onClick={() => dispatch(fetchCandidate(0))}>Fetch candidate 0</button>
-			<button onClick={() => dispatch(fetchCandidates())}>Fetch candidates</button>
+			<Button onClick={handleFetchCandidates}>Fetch Candidates</Button>
 
 			<p>{currentCandidate && currentCandidate.id}</p>
 
-			<p>{candidates && candidates.map(candidate => candidate.id).join(`, `)}</p>
-
-			<Link href={'/check'}>----</Link>
+			<p>{candidates && candidates.join(`, `)}</p>
 		</Page>
 	);
 };

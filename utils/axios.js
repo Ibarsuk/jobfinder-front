@@ -1,7 +1,8 @@
 import axios from 'axios';
 import store from 'redux/store';
 
-import { addToken, getAccessToken, getRefreshToken } from 'redux/stores/user';
+import { getAccessToken, getRefreshToken, logout, refreshTokes } from 'redux/stores/user';
+import apiRoutes from './apiRoutes';
 import { StatusCode } from './const';
 
 const TIMEOUT = 10000;
@@ -21,11 +22,11 @@ api.interceptors.response.use(
 	async res => {
 		if (res.status === StatusCode.TOKEN_REFRESH) {
 			try {
-				const { tokens, user } = await api.post('/refresh', getRefreshToken(store.getState()));
-				store.dispatch(addToken(tokens));
+				const refreshRes = await api.post(apiRoutes.users.refresh, { token: getRefreshToken(store.getState()) });
+				store.dispatch(refreshTokes(refreshRes.data));
 				return api.request(res.config);
 			} catch (e) {
-				// throw new UnauthorizedError();
+				store.dispatch(logout());
 			}
 		}
 

@@ -7,7 +7,7 @@ import Action from './actions';
 function* fetchCandidateSaga(action) {
 	const api = yield getContext('api');
 	try {
-		const res = yield call(api.get(`${apiRoutes.candidates}/${action.payload}`));
+		const res = yield call(api.get, `${apiRoutes.candidates}/${action.payload}`);
 		yield put(assignCurrentCandidate(res.data));
 	} catch (e) {
 		yield put(assignCurrentCandidate(null));
@@ -17,7 +17,7 @@ function* fetchCandidateSaga(action) {
 function* fetchCandidatesSaga() {
 	const api = yield getContext('api');
 	try {
-		const res = yield call(api.get(`${apiRoutes.candidates}`));
+		const res = yield call(api.get, `${apiRoutes.candidates}`);
 		yield put(succesCandidatesFetching(res.data));
 	} catch (e) {
 		yield put(failCandidatesFetching(e.response.data.message));
