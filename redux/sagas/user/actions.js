@@ -1,5 +1,8 @@
-import { AsyncAction } from 'redux/actions';
+export const Action = {
+	AUTH: `AUTH`,
+	LOGOUT: `LOGOUT`,
+};
 
-export const auth = payload => ({ type: AsyncAction.AUTH, payload });
+export const auth = payload => ({ type: Action.AUTH, payload });
 
-export const logout = () => ({ type: AsyncAction.LOGOUT });
+export const logout = () => ({ type: Action.LOGOUT });

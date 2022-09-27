@@ -3,9 +3,10 @@ import { all, call, put, getContext, takeLatest, select } from 'redux-saga/effec
 import apiRoutes from 'utils/apiRoutes';
 import { startAuth, successAuth, failAuth, getRefreshToken, logout } from 'redux/stores/user';
 import LocalStorage from 'utils/localStorage';
-import { AsyncAction, redirect } from 'redux/actions';
+import { redirect } from 'redux/globalActions';
 import routes from 'utils/routes';
 import Adapter from 'utils/Adapter';
+import { Action } from './actions';
 
 function* authSaga(action) {
 	const api = yield getContext('api');
@@ -23,7 +24,7 @@ function* authSaga(action) {
 
 function* logoutSaga() {
 	const api = yield getContext('api');
-	const refresh = select(getRefreshToken);
+	const refresh = yield select(getRefreshToken);
 	LocalStorage.remove(`tokens`);
 	LocalStorage.remove(`user`);
 	try {
@@ -34,7 +35,7 @@ function* logoutSaga() {
 }
 
 function* userSaga() {
-	yield all([takeLatest(AsyncAction.AUTH, authSaga), takeLatest(AsyncAction.LOGOUT, logoutSaga)]);
+	yield all([takeLatest(Action.AUTH, authSaga), takeLatest(Action.LOGOUT, logoutSaga)]);
 }
 
 export default userSaga;
