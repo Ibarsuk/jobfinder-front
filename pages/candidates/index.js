@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCandidates } from 'redux/sagas/candidates/actions';
 import { getCandidates, getCurrentCandidate } from 'redux/stores/candidates';
-import styles from '../styles/Home.module.css';
 
 const Candidates = () => {
 	const dispatch = useDispatch();

@@ -6,4 +6,12 @@ export default class Adapter {
 		delete user.last_name;
 		return user;
 	}
+
+	static adaptUserToServer(user) {
+		user.first_name = user.firstName;
+		user.last_name = user.lastName;
+		delete user.firstName;
+		delete user.lastName;
+		return user;
+	}
 }

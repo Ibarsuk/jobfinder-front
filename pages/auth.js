@@ -9,19 +9,18 @@ import { getAuthRequest } from 'redux/stores/user';
 import { RequestStatus } from 'utils/const';
 import { auth } from 'redux/sagas/user/actions';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+const formInitialData = { email: `mytester237@mail.com`, password: '!!11QQwas' };
 
 const authSchema = yup.object().shape({
 	email: yup.string().email().required(),
 	password: yup.string().required(),
 });
 
-const formInitialData = {
-	email: 'mytester237@mail.com',
-	password: '!!11QQwas',
-};
-
 const Auth = () => {
 	const dispath = useDispatch();
+	const router = useRouter();
 
 	const authRequest = useSelector(getAuthRequest);
 
@@ -39,6 +38,12 @@ const Auth = () => {
 			formik.setSubmitting(false);
 		}
 	}, [authRequest]);
+
+	useEffect(() => {
+		if (router.query.email) {
+			formik.setFieldValue(`email`, router.query.email);
+		}
+	}, [router.query]);
 
 	return (
 		<Page title="Авторизация" privateType={PrivateType.PRIVATE_AUTH}>

@@ -11,6 +11,10 @@ const initialState = {
 		status: RequestStatus.IDLE,
 		error: null,
 	},
+	createUserRequest: {
+		status: RequestStatus.IDLE,
+		error: null,
+	},
 	user: {
 		id: null,
 		firstName: null,
@@ -48,6 +52,21 @@ const userSlice = createSlice({
 			state.user = action.payload.user;
 		},
 
+		startUserCreation(state) {
+			state.createUserRequest.status = RequestStatus.LOADING;
+			state.createUserRequest.error = null;
+		},
+
+		failUserCreation(state, action) {
+			state.createUserRequest.status = RequestStatus.FAILED;
+			state.createUserRequest.error = action.payload;
+		},
+
+		successUserCreation(state) {
+			state.createUserRequest.status = RequestStatus.SUCCESS;
+			state.createUserRequest.error = null;
+		},
+
 		logout(state) {
 			state.user = initialState.user;
 			state.tokens = initialState.tokens;
@@ -61,5 +80,15 @@ const userSlice = createSlice({
 });
 
 export * from './selectors';
-export const { startAuth, failAuth, successAuth, initState, logout, refreshTokes } = userSlice.actions;
+export const {
+	startAuth,
+	failAuth,
+	successAuth,
+	initState,
+	logout,
+	refreshTokes,
+	startUserCreation,
+	failUserCreation,
+	successUserCreation,
+} = userSlice.actions;
 export default userSlice.reducer;

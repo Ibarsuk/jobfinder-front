@@ -25,9 +25,14 @@ const Header = () => {
 					</Nav.Item>
 
 					{!token && (
-						<Nav.Item>
-							<Link href={routes.auth.index}>Auth</Link>
-						</Nav.Item>
+						<>
+							<Nav.Item>
+								<Link href={routes.auth.index}>Sign In</Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Link href={routes.user.registration}>Sign Up</Link>
+							</Nav.Item>
+						</>
 					)}
 
 					{token && (
