@@ -6,16 +6,17 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCreateUserRequest } from 'redux/stores/user';
-import { RequestStatus } from 'utils/const';
+import { MIN_ALLOWED_AGE, RequestStatus } from 'utils/const';
 import { createUser } from 'redux/sagas/user/actions';
 import { useEffect } from 'react';
+import { getMinAllowedBirthDate } from 'utils/util';
 
 const createUserSchema = yup.object().shape({
 	firstName: yup.string().min(3).max(100).required(),
 	lastName: yup.string().min(3).max(100).required(),
 	email: yup.string().email().required(),
 	password: yup.string().min(8).required(),
-	age: yup.number().integer().min(16).max(100).required(),
+	birthDate: yup.date().max(getMinAllowedBirthDate(), `Your minimum age must be ${MIN_ALLOWED_AGE}`).required(),
 });
 
 const formInitialData = {
@@ -23,13 +24,13 @@ const formInitialData = {
 	lastName: `duo`,
 	email: `t@g.com`,
 	password: `1!Motors`,
-	age: `34`,
+	birthDate: `2000-01-01`,
 };
 
 const UserCreation = () => {
 	const dispath = useDispatch();
 
-	const createUserRequest = useSelector(getCreateUserRequest);
+	const userCreationRequest = useSelector(getCreateUserRequest);
 
 	const formik = useFormik({
 		initialValues: formInitialData,
@@ -41,10 +42,10 @@ const UserCreation = () => {
 	});
 
 	useEffect(() => {
-		if (createUserRequest.status !== RequestStatus.LOADING) {
+		if (userCreationRequest.status !== RequestStatus.LOADING) {
 			formik.setSubmitting(false);
 		}
-	}, [createUserRequest]);
+	}, [userCreationRequest]);
 
 	return (
 		<Page title="Registration" privateType={PrivateType.PRIVATE_AUTH}>
@@ -52,9 +53,9 @@ const UserCreation = () => {
 				<Col md={6}>
 					<h1>User Registration</h1>
 
-					{createUserRequest.status === RequestStatus.FAILED && (
+					{userCreationRequest.status === RequestStatus.FAILED && (
 						<Alert variant="danger" className="mt-3">
-							{createUserRequest.error}
+							{userCreationRequest.error}
 						</Alert>
 					)}
 
@@ -109,15 +110,15 @@ const UserCreation = () => {
 							</Form.Group>
 
 							<Form.Group>
-								<Form.Label>Age</Form.Label>
+								<Form.Label>Birth date</Form.Label>
 								<Form.Control
-									type="number"
-									name="age"
-									value={formik.values.age}
+									type="date"
+									name="birthDate"
+									value={formik.values.birthDate}
 									onChange={formik.handleChange}
-									isInvalid={formik.errors.age}
+									isInvalid={formik.errors.birthDate}
 								/>
-								<Form.Control.Feedback type="invalid">{formik.errors.age}</Form.Control.Feedback>
+								<Form.Control.Feedback type="invalid">{formik.errors.birthDate}</Form.Control.Feedback>
 							</Form.Group>
 						</fieldset>
 						<Button type="submit" className="mt-3">

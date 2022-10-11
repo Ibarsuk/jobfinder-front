@@ -19,7 +19,7 @@ const initialState = {
 		id: null,
 		firstName: null,
 		lastName: null,
-		age: null,
+		birthDate: null,
 		email: null,
 	},
 };

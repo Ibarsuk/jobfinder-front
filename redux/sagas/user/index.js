@@ -38,7 +38,7 @@ function* createUserSaga(action) {
 			put(redirect({ pathname: routes.auth.index, query: { email: action.payload.email } })),
 		]);
 	} catch (e) {
-		yield put(failUserCreation(e.response.data.message));
+		yield put(failUserCreation(e.response?.data.message || e.message));
 	}
 }
 

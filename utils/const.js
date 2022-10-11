@@ -1,3 +1,5 @@
+export const MIN_ALLOWED_AGE = 14;
+
 export const StatusCode = {
 	OK: 200,
 	CREATED: 201,

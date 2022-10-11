@@ -7,7 +7,7 @@ const User = () => {
 	const user = useSelector(getUser);
 
 	return (
-		<Page privateType={PrivateType.PRIVATE} title={`${user.firstName} ${user.lastName}}`}>
+		<Page privateType={PrivateType.PRIVATE} title={`${user.firstName} ${user.lastName}`}>
 			<Link href={'/check'}>----</Link>
 		</Page>
 	);
