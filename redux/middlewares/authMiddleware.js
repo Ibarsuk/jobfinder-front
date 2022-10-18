@@ -1,4 +1,4 @@
-import { logout, successAuth } from 'redux/stores/user';
+import { logout, auth } from 'redux/stores/user';
 import LocalStorage from 'utils/localStorage';
 
 export default state => next => action => {
@@ -7,7 +7,7 @@ export default state => next => action => {
 		LocalStorage.remove(`user`);
 	}
 
-	if (action.type === successAuth.type) {
+	if (action.type === auth.type) {
 		LocalStorage.write(`tokens`, action.payload.tokens);
 		LocalStorage.write(`user`, action.payload.user);
 	}

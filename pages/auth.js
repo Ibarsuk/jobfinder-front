@@ -5,11 +5,12 @@ import { Alert, Button, Container, Form, Col } from 'react-bootstrap';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthRequest } from 'redux/stores/user';
 import { RequestStatus } from 'utils/const';
 import { auth } from 'redux/sagas/user/actions';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { getRequest } from 'redux/stores/requests';
+import Requests from 'redux/stores/requests/Requests';
 
 const formInitialData = { email: `mytester237@mail.com`, password: '!!11QQwas' };
 
@@ -22,7 +23,7 @@ const Auth = () => {
 	const dispath = useDispatch();
 	const router = useRouter();
 
-	const authRequest = useSelector(getAuthRequest);
+	const authRequest = useSelector(getRequest(Requests.auth));
 
 	const formik = useFormik({
 		initialValues: formInitialData,
