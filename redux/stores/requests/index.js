@@ -22,9 +22,14 @@ const requestsSlice = createSlice({
 			state[payload].status = RequestStatus.SUCCESS;
 			state[payload].error = null;
 		},
+
+		resetRequest(state, { payload }) {
+			state[payload].status = RequestStatus.IDLE;
+			state[payload].error = null;
+		},
 	},
 });
 
 export * from './selectors';
-export const { startRequest, failRequest, successRequest } = requestsSlice.actions;
+export const { startRequest, failRequest, successRequest, resetRequest } = requestsSlice.actions;
 export default requestsSlice.reducer;

@@ -16,6 +16,7 @@ module.exports = {
 					['components', './components'],
 					['redux', './redux'],
 					['utils', './utils'],
+					['hooks', './hooks'],
 				],
 				extensions: ['.js', '.jsx', '.png', '.jpg', '.svg', 'sass'],
 			},

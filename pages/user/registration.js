@@ -4,13 +4,13 @@ import { Alert, Button, Container, Form, Col } from 'react-bootstrap';
 
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { MIN_ALLOWED_AGE, RequestStatus } from 'utils/const';
 import { createUser } from 'redux/sagas/user/actions';
 import { useEffect } from 'react';
 import { getMinAllowedBirthDate } from 'utils/util';
-import { getRequest } from 'redux/stores/requests';
 import Requests from 'redux/stores/requests/Requests';
+import useRequest from 'hooks/useRequest';
 
 const createUserSchema = yup.object().shape({
 	firstName: yup.string().min(3).max(100).required(),
@@ -31,7 +31,7 @@ const formInitialData = {
 const UserCreation = () => {
 	const dispath = useDispatch();
 
-	const userCreationRequest = useSelector(getRequest(Requests.createUser));
+	const userCreationRequest = useRequest(Requests.createUser);
 
 	const formik = useFormik({
 		initialValues: formInitialData,

@@ -4,12 +4,12 @@ import { Alert, Button, Container, Form, Col } from 'react-bootstrap';
 
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { RequestStatus } from 'utils/const';
 import { auth } from 'redux/sagas/user/actions';
 import { useEffect } from 'react';
-import { getRequest } from 'redux/stores/requests';
 import Requests from 'redux/stores/requests/Requests';
+import useRequest from 'hooks/useRequest';
 
 const authSchema = yup.object().shape({
 	experience: yup.number().integer().min(0).max(100).required(),
@@ -32,7 +32,7 @@ const formInitialData = {
 const CandidateCreation = () => {
 	const dispath = useDispatch();
 
-	const candidateCreationRequest = useSelector(getRequest(Requests.createCandidate));
+	const candidateCreationRequest = useRequest(Requests.createCandidate);
 
 	const formik = useFormik({
 		initialValues: formInitialData,
@@ -47,16 +47,7 @@ const CandidateCreation = () => {
 		if (candidateCreationRequest.status !== RequestStatus.LOADING) {
 			formik.setSubmitting(false);
 		}
-		// return () => {
-		// 	console.log(`clean`);
-		// };
 	}, [candidateCreationRequest]);
-
-	// useEffect(() => {
-	// 	return () => {
-	// 		console.log(`clean c`);
-	// 	};
-	// }, []);
 
 	return (
 		<Page title="Candidate Form" privateType={PrivateType.PRIVATE}>
