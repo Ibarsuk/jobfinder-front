@@ -14,3 +14,9 @@ export const getRequestReducerInitialState = () => {
 		return acc;
 	}, {});
 };
+
+export const getFormData = values =>
+	Object.entries(values).reduce((formData, [field, value]) => {
+		formData.append(field, value);
+		return formData;
+	}, new FormData());

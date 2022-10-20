@@ -16,7 +16,10 @@ const sagaMiddleware = createSagaMiddleware({
 const store = configureStore({
 	reducer,
 	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware).concat(redirectMiddleware).concat(authMiddleware),
+		getDefaultMiddleware({ thunk: false, serializableCheck: false })
+			.concat(sagaMiddleware)
+			.concat(redirectMiddleware)
+			.concat(authMiddleware),
 });
 
 sagaMiddleware.run(rootSaga);

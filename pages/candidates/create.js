@@ -6,10 +6,12 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { RequestStatus } from 'utils/const';
-import { auth } from 'redux/sagas/user/actions';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Requests from 'redux/stores/requests/Requests';
 import useRequest from 'hooks/useRequest';
+import { createCandidate } from 'redux/sagas/candidates/actions';
+import Image from 'next/image';
+import { getFormData } from 'utils/util';
 
 const authSchema = yup.object().shape({
 	experience: yup.number().integer().min(0).max(100).required(),
@@ -17,7 +19,6 @@ const authSchema = yup.object().shape({
 	city: yup.string().max(100),
 	portfolio: yup.string().url(),
 	text: yup.string().max(2000),
-	photo: yup.string().max(256),
 });
 
 const formInitialData = {
@@ -26,11 +27,12 @@ const formInitialData = {
 	city: `Omsk`,
 	portfolio: `https://github.com/Ibarsuk`,
 	text: `Text`,
-	photo: ``,
+	photo: null,
 };
 
 const CandidateCreation = () => {
 	const dispath = useDispatch();
+	const [photoPreview, setPhotoPreview] = useState(null);
 
 	const candidateCreationRequest = useRequest(Requests.createCandidate);
 
@@ -39,9 +41,25 @@ const CandidateCreation = () => {
 		validationSchema: authSchema,
 		validateOnChange: false,
 		onSubmit: values => {
-			dispath(auth(values));
+			dispath(createCandidate(getFormData(values)));
 		},
 	});
+
+	useEffect(() => {
+		if (formik.values.photo) {
+			const reader = new FileReader();
+
+			reader.onloadend = () => {
+				setPhotoPreview(reader.result);
+			};
+
+			reader.readAsDataURL(formik.values.photo);
+		}
+	}, [formik.values.photo]);
+
+	const handlePhotoFieldChange = useCallback(event => {
+		formik.setFieldValue(`photo`, event.currentTarget.files[0]);
+	}, []);
 
 	useEffect(() => {
 		if (candidateCreationRequest.status !== RequestStatus.LOADING) {
@@ -61,7 +79,7 @@ const CandidateCreation = () => {
 						</Alert>
 					)}
 
-					<Form onSubmit={formik.handleSubmit}>
+					<Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
 						<fieldset disabled={formik.isValidating || formik.isSubmitting}>
 							<Form.Group>
 								<Form.Label>Опыт в годах</Form.Label>
@@ -128,13 +146,13 @@ const CandidateCreation = () => {
 								<Form.Control
 									type="file"
 									name="photo"
-									value={formik.values.photo}
-									onChange={formik.handleChange}
+									onChange={handlePhotoFieldChange}
 									isInvalid={formik.errors.photo}
 								/>
 								<Form.Control.Feedback type="invalid">{formik.errors.photo}</Form.Control.Feedback>
 							</Form.Group>
 						</fieldset>
+						{photoPreview && <Image src={photoPreview} alt="Chosen photo" width="200" height="200" />}
 						<Button type="submit" className="mt-3">
 							Submit
 						</Button>
