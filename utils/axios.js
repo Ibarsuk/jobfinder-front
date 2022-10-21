@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from 'redux/store';
 
-import { getAccessToken, getRefreshToken, logout, refreshTokes } from 'redux/stores/user';
+import { auth, getAccessToken, getRefreshToken, logout } from 'redux/stores/user';
 import apiRoutes from './apiRoutes';
 import { StatusCode } from './const';
 
@@ -23,7 +23,7 @@ api.interceptors.response.use(
 		if (res.status === StatusCode.TOKEN_REFRESH) {
 			try {
 				const refreshRes = await api.post(apiRoutes.users.refresh, { token: getRefreshToken(store.getState()) });
-				store.dispatch(refreshTokes(refreshRes.data));
+				store.dispatch(auth(refreshRes.data));
 				return api.request(res.config);
 			} catch (e) {
 				store.dispatch(logout());
