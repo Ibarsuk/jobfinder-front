@@ -9,22 +9,22 @@ import { RequestStatus } from 'utils/const';
 import { useCallback, useEffect, useState } from 'react';
 import Requests from 'redux/stores/requests/Requests';
 import useRequest from 'hooks/useRequest';
-import { createCandidate } from 'redux/sagas/candidates/actions';
 import Image from 'next/image';
+import { createCompany } from 'redux/sagas/companies/actions';
 
 const schema = yup.object().shape({
-	experience: yup.number().integer().min(0).max(100).required(),
+	minExperience: yup.number().integer().min(0).max(100).required(),
 	position: yup.string().max(100).required(),
 	city: yup.string().max(100),
-	portfolio: yup.string().url(),
+	website: yup.string().url(),
 	text: yup.string().max(2000),
 });
 
 const formInitialData = {
-	experience: `1`,
+	minExperience: `1`,
 	position: `Position`,
 	city: `Omsk`,
-	portfolio: `https://github.com/Ibarsuk`,
+	website: `https://github.com/Ibarsuk`,
 	text: `Text`,
 	photo: ``,
 };
@@ -33,14 +33,14 @@ const CandidateCreation = () => {
 	const dispath = useDispatch();
 	const [photoPreview, setPhotoPreview] = useState(null);
 
-	const candidateCreationRequest = useRequest(Requests.createCandidate);
+	const companyCreationRequest = useRequest(Requests.createCompany);
 
 	const formik = useFormik({
 		initialValues: formInitialData,
 		validationSchema: schema,
 		validateOnChange: false,
 		onSubmit: values => {
-			dispath(createCandidate(values));
+			dispath(createCompany(values));
 		},
 	});
 
@@ -61,35 +61,35 @@ const CandidateCreation = () => {
 	}, []);
 
 	useEffect(() => {
-		if (candidateCreationRequest.status !== RequestStatus.LOADING) {
+		if (companyCreationRequest.status !== RequestStatus.LOADING) {
 			formik.setSubmitting(false);
 		}
-	}, [candidateCreationRequest]);
+	}, [companyCreationRequest]);
 
 	return (
-		<Page title="Candidate Form" privateType={PrivateType.PRIVATE}>
+		<Page title="Company form" privateType={PrivateType.PRIVATE}>
 			<Container fluid="md">
 				<Col md={6}>
-					<h1>Candidate form creation</h1>
+					<h1>Company creation form</h1>
 
-					{candidateCreationRequest.status === RequestStatus.FAILED && (
+					{companyCreationRequest.status === RequestStatus.FAILED && (
 						<Alert variant="danger" className="mt-3">
-							{candidateCreationRequest.error}
+							{companyCreationRequest.error}
 						</Alert>
 					)}
 
 					<Form onSubmit={formik.handleSubmit} encType="multipart/form-data">
 						<fieldset disabled={formik.isValidating || formik.isSubmitting}>
 							<Form.Group>
-								<Form.Label>Experience in years</Form.Label>
+								<Form.Label>Minimum experience in years</Form.Label>
 								<Form.Control
 									type="number"
-									name="experience"
-									value={formik.values.experience}
+									name="minExperience"
+									value={formik.values.minExperience}
 									onChange={formik.handleChange}
-									isInvalid={formik.errors.experience}
+									isInvalid={formik.errors.minExperience}
 								/>
-								<Form.Control.Feedback type="invalid">{formik.errors.experience}</Form.Control.Feedback>
+								<Form.Control.Feedback type="invalid">{formik.errors.minExperience}</Form.Control.Feedback>
 							</Form.Group>
 
 							<Form.Group>
@@ -117,19 +117,19 @@ const CandidateCreation = () => {
 							</Form.Group>
 
 							<Form.Group>
-								<Form.Label>Portfolio</Form.Label>
+								<Form.Label>Company website</Form.Label>
 								<Form.Control
 									type="text"
-									name="portfolio"
-									value={formik.values.portfolio}
+									name="website"
+									value={formik.values.website}
 									onChange={formik.handleChange}
-									isInvalid={formik.errors.portfolio}
+									isInvalid={formik.errors.website}
 								/>
-								<Form.Control.Feedback type="invalid">{formik.errors.portfolio}</Form.Control.Feedback>
+								<Form.Control.Feedback type="invalid">{formik.errors.website}</Form.Control.Feedback>
 							</Form.Group>
 
 							<Form.Group>
-								<Form.Label>Text about yourself</Form.Label>
+								<Form.Label>Text about company</Form.Label>
 								<Form.Control
 									type="text"
 									name="text"

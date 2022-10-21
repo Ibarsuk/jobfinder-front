@@ -15,7 +15,7 @@ const Candidates = () => {
 	}, []);
 
 	return (
-		<Page privateType={PrivateType.PRIVATE} title="Соискатели">
+		<Page privateType={PrivateType.PRIVATE} title="Candidates">
 			<Button onClick={handleFetchCandidates}>Fetch Candidates</Button>
 
 			<p>{currentCandidate && currentCandidate.id}</p>

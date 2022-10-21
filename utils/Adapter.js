@@ -10,12 +10,24 @@ export default class Adapter {
 	}
 
 	static adaptUserToServer(user) {
-		user.first_name = user.firstName;
-		user.last_name = user.lastName;
-		user.birth_date = user.birthDate;
-		delete user.firstName;
-		delete user.lastName;
-		delete user.birthDate;
-		return user;
+		const userData = { ...user };
+
+		userData.first_name = userData.firstName;
+		userData.last_name = userData.lastName;
+		userData.birth_date = userData.birthDate;
+		delete userData.firstName;
+		delete userData.lastName;
+		delete userData.birthDate;
+
+		return userData;
+	}
+
+	static adaptCompanyToServer(company) {
+		const companyData = { ...company };
+
+		companyData.min_experience = companyData.minExperience;
+		delete companyData.minExperience;
+
+		return companyData;
 	}
 }

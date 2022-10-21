@@ -3,4 +3,6 @@ export default {
 	createUser: `createUser`,
 	getCandidates: `getCandidates`,
 	createCandidate: `createCandidate`,
+	createCompany: `createCompany`,
+	getCompanies: `getCompanies`,
 };

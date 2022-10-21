@@ -6,4 +6,5 @@ export default {
 		refresh: `users/refresh`,
 	},
 	candidates: `candidates`,
+	companies: `companies`,
 };

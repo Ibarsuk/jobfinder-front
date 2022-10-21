@@ -38,7 +38,7 @@ const UserCreation = () => {
 		validationSchema: createUserSchema,
 		validateOnChange: false,
 		onSubmit: values => {
-			dispath(createUser({ ...values }));
+			dispath(createUser(values));
 		},
 	});
 
