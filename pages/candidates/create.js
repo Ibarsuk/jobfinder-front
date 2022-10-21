@@ -11,7 +11,6 @@ import Requests from 'redux/stores/requests/Requests';
 import useRequest from 'hooks/useRequest';
 import { createCandidate } from 'redux/sagas/candidates/actions';
 import Image from 'next/image';
-import { getFormData } from 'utils/util';
 
 const authSchema = yup.object().shape({
 	experience: yup.number().integer().min(0).max(100).required(),
@@ -41,7 +40,7 @@ const CandidateCreation = () => {
 		validationSchema: authSchema,
 		validateOnChange: false,
 		onSubmit: values => {
-			dispath(createCandidate(getFormData(values)));
+			dispath(createCandidate(values));
 		},
 	});
 
