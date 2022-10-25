@@ -5,4 +5,5 @@ export default {
 	createCandidate: `createCandidate`,
 	createCompany: `createCompany`,
 	getCompanies: `getCompanies`,
+	getUser: `getUser`,
 };

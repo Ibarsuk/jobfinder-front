@@ -6,6 +6,11 @@ export default class Adapter {
 		delete user.first_name;
 		delete user.last_name;
 		delete user.birth_date;
+
+		if (user.company) {
+			user.company = this.adaptCompanyToClient(user.company);
+		}
+
 		return user;
 	}
 
@@ -29,5 +34,12 @@ export default class Adapter {
 		delete companyData.minExperience;
 
 		return companyData;
+	}
+
+	static adaptCompanyToClient(company) {
+		company.minExperience = company.min_experience;
+		delete company.min_experience;
+
+		return company;
 	}
 }

@@ -1,13 +1,25 @@
 import { all, call, put, getContext, takeLatest, select } from 'redux-saga/effects';
 
 import apiRoutes from 'utils/apiRoutes';
-import { getRefreshToken, logout, auth } from 'redux/stores/user';
+import { getRefreshToken, logout, auth, setUser } from 'redux/stores/user';
 import { redirect } from 'redux/globalActions';
 import routes from 'utils/routes';
 import Adapter from 'utils/Adapter';
 import { failRequest, startRequest, successRequest } from 'redux/stores/requests';
 import Requests from 'redux/stores/requests/Requests';
 import { Action } from './actions';
+
+function* getUserSaga() {
+	const api = yield getContext('api');
+	yield put(startRequest(Requests.getUser));
+	try {
+		const res = yield call(api.get, apiRoutes.users.index);
+		res.data = Adapter.adaptUserToClient(res.data);
+		yield all([put(successRequest(Requests.getUser)), put(setUser(res.data))]);
+	} catch (e) {
+		yield put(failRequest({ request: Requests.getUser, error: e.response.data.message }));
+	}
+}
 
 function* authSaga(action) {
 	const api = yield getContext('api');
@@ -50,6 +62,7 @@ function* userSaga() {
 		takeLatest(Action.AUTH, authSaga),
 		takeLatest(Action.LOGOUT, logoutSaga),
 		takeLatest(Action.CREATE_USER, createUserSaga),
+		takeLatest(Action.GET_USER, getUserSaga),
 	]);
 }
 

@@ -10,4 +10,7 @@ export default {
 	candidates: {
 		index: `/candidates`,
 	},
+	companies: {
+		index: `/companies`,
+	},
 };

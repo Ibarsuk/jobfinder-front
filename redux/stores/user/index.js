@@ -35,9 +35,13 @@ const userSlice = createSlice({
 			state.user = initialState.user;
 			state.tokens = initialState.tokens;
 		},
+
+		setUser(state, action) {
+			state.user = action.payload;
+		},
 	},
 });
 
 export * from './selectors';
-export const { initState, auth, logout } = userSlice.actions;
+export const { initState, auth, logout, setUser } = userSlice.actions;
 export default userSlice.reducer;
