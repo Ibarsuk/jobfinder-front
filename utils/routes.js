@@ -9,8 +9,10 @@ export default {
 	},
 	candidates: {
 		index: `/candidates`,
+		create: `/candidates/create`,
 	},
 	companies: {
 		index: `/companies`,
+		create: `/companies/create`,
 	},
 };

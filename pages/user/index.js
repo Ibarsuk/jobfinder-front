@@ -27,21 +27,29 @@ const User = () => {
 
 			{userRequest.status === RequestStatus.SUCCESS ? (
 				<Row>
-					{user.candidate && (
+					{user.candidate ? (
 						<Link href={routes.candidates.index}>
 							<Col>
 								<p>{user.candidate.position}</p>
 								<p>{user.candidate.experience}</p>
 							</Col>
 						</Link>
+					) : (
+						<Col>
+							<Link href={routes.candidates.create}>Create candidate form</Link>
+						</Col>
 					)}
-					{user.company && (
+					{user.company ? (
 						<Link href={routes.companies.index}>
 							<Col>
 								<p>{user.company.position}</p>
 								<p>{user.company.minExperience}</p>
 							</Col>
 						</Link>
+					) : (
+						<Col>
+							<Link href={routes.companies.create}>Create company form</Link>
+						</Col>
 					)}
 				</Row>
 			) : (
