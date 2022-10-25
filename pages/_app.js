@@ -1,16 +1,12 @@
 import { useLayoutEffect } from 'react';
 import { Provider } from 'react-redux';
+import { initState } from 'redux/globalActions';
 import store from 'redux/store';
-import { initState } from 'redux/stores/user';
-import LocalStorage from 'utils/localStorage';
-
 import '../styles/global.sass';
 
 function MyApp({ Component, pageProps }) {
 	useLayoutEffect(() => {
-		const tokens = LocalStorage.read(`tokens`);
-		const user = LocalStorage.read(`user`);
-		store.dispatch(initState({ tokens, user }));
+		store.dispatch(initState());
 	}, []);
 
 	return (

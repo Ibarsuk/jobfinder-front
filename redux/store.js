@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 
 import api from 'utils/axios';
-import authMiddleware from './middlewares/authMiddleware';
+import localStorageMiddleware from './middlewares/localStorageMiddleware';
 import redirectMiddleware from './middlewares/redirectMiddleware';
 import rootSaga from './sagas/root-saga';
 import reducer from './stores/rootReducer';
@@ -19,7 +19,7 @@ const store = configureStore({
 		getDefaultMiddleware({ thunk: false, serializableCheck: false })
 			.concat(sagaMiddleware)
 			.concat(redirectMiddleware)
-			.concat(authMiddleware),
+			.concat(localStorageMiddleware),
 });
 
 sagaMiddleware.run(rootSaga);

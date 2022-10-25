@@ -19,7 +19,7 @@ const userSlice = createSlice({
 	name: `user`,
 	initialState,
 	reducers: {
-		initState(state, action) {
+		initUserState(state, action) {
 			state.tokens.access = action.payload.tokens?.access;
 			state.tokens.refresh = action.payload.tokens?.refresh;
 			state.user = { ...initialState.user, ...action.payload.user };
@@ -43,5 +43,5 @@ const userSlice = createSlice({
 });
 
 export * from './selectors';
-export const { initState, auth, logout, setUser } = userSlice.actions;
+export const { initUserState, auth, logout, setUser } = userSlice.actions;
 export default userSlice.reducer;
