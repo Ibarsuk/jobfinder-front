@@ -1,7 +1,13 @@
-import { all, call, put, getContext, takeLatest } from 'redux-saga/effects';
+import { all, call, put, getContext, takeLatest, select } from 'redux-saga/effects';
 
 import apiRoutes from 'utils/apiRoutes';
-import { assignCurrentCandidate, setCandidates } from 'redux/stores/candidates';
+import {
+	addCandidates,
+	assignCurrentCandidate,
+	getCandidates,
+	getCurrentCandidate,
+	setCandidates,
+} from 'redux/stores/candidates';
 import { failRequest, startRequest, successRequest } from 'redux/stores/requests';
 import Requests from 'redux/stores/requests/Requests';
 import routes from 'utils/routes';
@@ -9,7 +15,7 @@ import { redirect } from 'redux/globalActions';
 import { getFormData } from 'utils/util';
 import Action from './actions';
 
-function* fetchCandidateSaga(action) {
+function* getCandidatesInfoSaga(action) {
 	const api = yield getContext('api');
 	try {
 		const res = yield call(api.get, `${apiRoutes.candidates}/${action.payload}`);
@@ -19,12 +25,12 @@ function* fetchCandidateSaga(action) {
 	}
 }
 
-function* fetchCandidatesSaga() {
+function* addCandidatesSaga() {
 	const api = yield getContext('api');
 	yield put(startRequest(Requests.getCandidates));
 	try {
 		const res = yield call(api.get, `${apiRoutes.candidates}`);
-		yield all([put(successRequest(Requests.getCandidates)), put(setCandidates(res.data))]);
+		yield all([put(successRequest(Requests.getCandidates)), put(addCandidates(res.data))]);
 	} catch (e) {
 		yield put(failRequest({ request: Requests.getCandidates, error: e.response.data.message }));
 	}
@@ -45,8 +51,8 @@ function* createCandidateSaga(action) {
 
 function* candidatesSaga() {
 	yield all([
-		takeLatest(Action.FETCH_CANDIDATE, fetchCandidateSaga),
-		takeLatest(Action.FETCH_CANDIDATES, fetchCandidatesSaga),
+		takeLatest(Action.GET_CANDIDATES_INFO, getCandidatesInfoSaga),
+		takeLatest(Action.ADD_CANDIDATES, addCandidatesSaga),
 		takeLatest(Action.CREATE_CANDIDATE, createCandidateSaga),
 	]);
 }

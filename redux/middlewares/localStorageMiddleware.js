@@ -1,5 +1,5 @@
 import { Action } from 'redux/globalActions';
-import { initCandidatesState } from 'redux/stores/candidates';
+import { addCandidates, initCandidatesState, initialState } from 'redux/stores/candidates';
 import { logout, auth, initUserState } from 'redux/stores/user';
 import LocalStorage from 'utils/localStorage';
 
@@ -19,11 +19,18 @@ export default store => next => action => {
 		const user = LocalStorage.read(`user`);
 		store.dispatch(initUserState({ tokens, user }));
 
-		const candidates = LocalStorage.read(`candidates`);
-		const currentCandidate = LocalStorage.read(`currentCandidate`);
-		const currentRequestCandidate = LocalStorage.read(`currentRequestCandidate`);
-		const fetchedCandidates = LocalStorage.read(`fetchedCandidates`);
-		store.dispatch(initCandidatesState({ candidates, currentCandidate, currentRequestCandidate, fetchedCandidates }));
+		const candidates = LocalStorage.read(`candidates`) || initialState.candidates;
+		const currentCandidate = LocalStorage.read(`currentCandidate`) || initialState.currentCandidate;
+		const currentRequestCandidate = LocalStorage.read(`currentRequestCandidate`) || initialState.currentRequestCandidate;
+		store.dispatch(initCandidatesState({ candidates, currentCandidate, currentRequestCandidate }));
 	}
+
 	next(action);
+
+	if (action.type === addCandidates.type) {
+		const candidatesStore = store.getState().candidates;
+		LocalStorage.write(`candidates`, candidatesStore.candidates);
+		LocalStorage.write(`currentCandidate`, candidatesStore.currentCandidate);
+		LocalStorage.write(`currentRequestCandidate`, candidatesStore.currentRequestCandidate);
+	}
 };

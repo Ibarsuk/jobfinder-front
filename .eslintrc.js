@@ -5,8 +5,15 @@ module.exports = {
 		commonjs: true,
 		node: true,
 	},
-	extends: ['next/core-web-vitals', 'airbnb-base', 'plugin:react/recommended', 'prettier', 'plugin:prettier/recommended'],
-	plugins: ['react', 'react-hooks', 'prettier'],
+	extends: [
+		'next/core-web-vitals',
+		'airbnb-base',
+		'plugin:react/recommended',
+		'prettier',
+		'plugin:prettier/recommended',
+		'plugin:jest/recommended',
+	],
+	plugins: ['react', 'react-hooks', 'prettier', 'jest'],
 
 	settings: {
 		'import/resolver': {
