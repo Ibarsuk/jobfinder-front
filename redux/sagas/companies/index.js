@@ -14,7 +14,7 @@ function* fetchCompaniesSaga() {
 	const api = yield getContext('api');
 	yield put(startRequest(Requests.getCompanies));
 	try {
-		const res = yield call(api.get, `${apiRoutes.companies}`);
+		const res = yield call(api.get, `${apiRoutes.companies.index}`);
 		yield all([put(successRequest(Requests.getCompanies)), put(setCompanies(res.data))]);
 	} catch (e) {
 		yield put(failRequest({ request: Requests.getCompanies, error: e.response.data.message }));
@@ -26,7 +26,7 @@ function* createCompanySaga(action) {
 	yield put(startRequest(Requests.createCompany));
 	try {
 		const data = getFormData(Adapter.adaptCompanyToServer(action.payload));
-		yield call(api.post, apiRoutes.companies, data, {
+		yield call(api.post, apiRoutes.companies.index, data, {
 			Headers: { 'Content-Type': 'multipart/form-data' },
 		});
 		yield all([put(successRequest(Requests.createCompany)), put(redirect(routes.user.index))]);

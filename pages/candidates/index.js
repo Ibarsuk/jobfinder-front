@@ -1,8 +1,8 @@
 import Page, { PrivateType } from 'components/Page';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCandidates, fetchCandidates, getCandidatesInfo } from 'redux/sagas/candidates/actions';
+import { addCandidates, fetchCandidates, getCandidatesInfo, getCandidatesInfoOnLoad } from 'redux/sagas/candidates/actions';
 import {
 	getCandidates,
 	getCurrentCandidate,
@@ -14,6 +14,7 @@ import {
 
 const Candidates = () => {
 	const dispatch = useDispatch();
+	const isInfoLoaded = useRef(false);
 
 	const candidates = useSelector(getCandidates);
 	const currentCandidate = useSelector(getCurrentCandidate);
@@ -33,10 +34,11 @@ const Candidates = () => {
 	}, [isStoreInitialized, candidates]);
 
 	useEffect(() => {
-		if (isStoreInitialized && candidates.length) {
-			dispatch(getCandidatesInfo());
+		if (!isInfoLoaded.current && isStoreInitialized && candidates.length) {
+			dispatch(getCandidatesInfoOnLoad());
+			isInfoLoaded.current = true;
 		}
-	}, []);
+	}, [isStoreInitialized, candidates]);
 
 	if (!isStoreInitialized) {
 		return null;

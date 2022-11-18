@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { MAX_BACK_STEPS_ALLOWED } from 'utils/const';
+import { FORMS_INFO_ARRAY_SIZE, MAX_BACK_STEPS_ALLOWED } from 'utils/const';
 
 export const initialState = {
 	candidates: [],
 	currentCandidate: 0,
-	currentRequestCandidate: 0,
+	currentRequestCandidate: FORMS_INFO_ARRAY_SIZE,
 	fetchedCandidates: [],
 	isStoreInitialized: false,
 	runningRequests: 0,
@@ -22,10 +22,23 @@ const candidatesSlice = createSlice({
 			const isCandidatesListEmpty = !state.candidates.length;
 			state.candidates.splice(0, state.currentCandidate - MAX_BACK_STEPS_ALLOWED);
 			state.candidates = state.candidates.concat(action.payload);
-			state.currentRequestCandidate = isCandidatesListEmpty
-				? 0
-				: state.currentRequestCandidate - (state.currentCandidate - MAX_BACK_STEPS_ALLOWED);
-			state.currentCandidate = isCandidatesListEmpty ? 0 : MAX_BACK_STEPS_ALLOWED;
+
+			if (isCandidatesListEmpty || !state.currentCandidate) {
+				return;
+			}
+
+			state.currentRequestCandidate -= state.currentCandidate - MAX_BACK_STEPS_ALLOWED;
+			state.currentCandidate = MAX_BACK_STEPS_ALLOWED;
+		},
+
+		addCandidatesInfo(state, action) {
+			state.fetchedCandidates.push(...action.payload);
+		},
+
+		addCandidateInfo() {},
+
+		completeRequestStep(state, { payload = 1 }) {
+			state.currentRequestCandidate += payload;
 		},
 
 		initCandidatesState(state, action) {
@@ -38,5 +51,6 @@ const candidatesSlice = createSlice({
 });
 
 export * from './selectors';
-export const { setCandidates, initCandidatesState, addCandidates } = candidatesSlice.actions;
+export const { setCandidates, initCandidatesState, addCandidates, addCandidatesInfo, completeRequestStep } =
+	candidatesSlice.actions;
 export default candidatesSlice.reducer;

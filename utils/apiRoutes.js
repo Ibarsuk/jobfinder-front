@@ -5,6 +5,12 @@ export default {
 		logout: `users/logout`,
 		refresh: `users/refresh`,
 	},
-	candidates: `candidates`,
-	companies: `companies`,
+	candidates: {
+		index: `candidates`,
+		info: `candidates/info`,
+	},
+	companies: {
+		index: `companies`,
+		info: `companies/info`,
+	},
 };

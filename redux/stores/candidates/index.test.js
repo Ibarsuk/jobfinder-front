@@ -1,3 +1,4 @@
+import { FORMS_INFO_ARRAY_SIZE } from 'utils/const';
 import reducer, { addCandidates, initialState } from './index';
 
 describe(`Candidates reducer works correctly`, () => {
@@ -7,8 +8,32 @@ describe(`Candidates reducer works correctly`, () => {
 
 			const newCandidates = [45, 856, 442, 765];
 
-			const expectedState = { ...initialState, candidates: newCandidates };
+			const expectedState = { ...initialState, candidates: newCandidates, currentRequestCandidate: FORMS_INFO_ARRAY_SIZE };
 
+			expect(reducer(state, addCandidates(newCandidates))).toEqual(expectedState);
+		});
+
+		it(`Adds when right after loading`, () => {
+			const candidates = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+			const state = {
+				candidates,
+				currentCandidate: 0,
+				currentRequestCandidate: 5,
+				fetchedCandidates: [],
+				isStoreInitialized: true,
+				runningRequests: 0,
+			};
+
+			const newCandidates = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+			const expectedState = {
+				candidates: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+				currentCandidate: 0,
+				currentRequestCandidate: 5,
+				fetchedCandidates: [],
+				isStoreInitialized: true,
+				runningRequests: 0,
+			};
 			expect(reducer(state, addCandidates(newCandidates))).toEqual(expectedState);
 		});
 

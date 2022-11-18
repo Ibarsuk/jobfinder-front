@@ -6,4 +6,5 @@ export default {
 	createCompany: `createCompany`,
 	getCompanies: `getCompanies`,
 	getUser: `getUser`,
+	getCandidatesInfoOnLoad: `GetCandidatesInfoOnLoad`,
 };
