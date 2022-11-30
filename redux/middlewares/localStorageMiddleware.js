@@ -21,8 +21,7 @@ export default store => next => action => {
 
 		const candidates = LocalStorage.read(`candidates`) || initialState.candidates;
 		const currentCandidate = LocalStorage.read(`currentCandidate`) || initialState.currentCandidate;
-		const currentRequestCandidate = LocalStorage.read(`currentRequestCandidate`) || initialState.currentRequestCandidate;
-		store.dispatch(initCandidatesState({ candidates, currentCandidate, currentRequestCandidate }));
+		store.dispatch(initCandidatesState({ candidates, currentCandidate }));
 	}
 
 	next(action);
@@ -31,6 +30,5 @@ export default store => next => action => {
 		const candidatesStore = store.getState().candidates;
 		LocalStorage.write(`candidates`, candidatesStore.candidates);
 		LocalStorage.write(`currentCandidate`, candidatesStore.currentCandidate);
-		LocalStorage.write(`currentRequestCandidate`, candidatesStore.currentRequestCandidate);
 	}
 };

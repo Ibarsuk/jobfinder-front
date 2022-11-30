@@ -6,10 +6,8 @@ import {
 	addCandidatesInfo,
 	assignCurrentCandidate,
 	completeRequestStep,
-	getCandidates,
 	getCandidatesState,
-	getCurrentCandidate,
-	setCandidates,
+	removeCandidates,
 } from 'redux/stores/candidates';
 import { failRequest, startRequest, successRequest } from 'redux/stores/requests';
 import Requests from 'redux/stores/requests/Requests';
@@ -40,20 +38,27 @@ function* addCandidatesSaga() {
 	}
 }
 
+function* selectCandidatesWithUnderflowCheck(candidatesNeededToFetch) {
+	const state = yield select(getCandidatesState);
+
+	if (state.currentRequestCandidate + candidatesNeededToFetch > state.candidates.length) {
+		yield addCandidatesSaga();
+		const reselectedState = yield select(getCandidatesState);
+		return reselectedState;
+	}
+
+	return state;
+}
+
 function* getCandidatesToCompleteFilling(formsNumberToCompletefilling) {
 	const api = yield getContext('api');
 	const candidatesToCompleteFilling = [];
 	let remainingFormsNumberToCompletefilling = formsNumberToCompletefilling;
 
 	while (remainingFormsNumberToCompletefilling > 0) {
-		let { candidates, currentRequestCandidate } = yield select(getCandidatesState);
-
-		if (currentRequestCandidate + remainingFormsNumberToCompletefilling > candidates.length) {
-			yield addCandidatesSaga();
-			const reselected = yield select(getCandidatesState);
-			candidates = reselected.candidates;
-			currentRequestCandidate = reselected.currentRequestCandidate;
-		}
+		const { candidates, currentRequestCandidate } = yield selectCandidatesWithUnderflowCheck(
+			remainingFormsNumberToCompletefilling
+		);
 
 		const candidateFormsIdToLoad = candidates.slice(
 			currentRequestCandidate,
@@ -62,29 +67,40 @@ function* getCandidatesToCompleteFilling(formsNumberToCompletefilling) {
 
 		const res = yield call(api.get, `${apiRoutes.candidates.info}`, { params: { ids: candidateFormsIdToLoad } });
 		const formsNumberSuccessfullyFetched = res.data.data.length;
+		const formsFailedToFetch = res.data.not_found;
 
 		if (formsNumberSuccessfullyFetched) {
 			candidatesToCompleteFilling.push(...res.data.data);
 			remainingFormsNumberToCompletefilling -= formsNumberSuccessfullyFetched;
+			yield put(completeRequestStep(formsNumberSuccessfullyFetched));
 		}
-		yield put(completeRequestStep(candidateFormsIdToLoad.length));
+
+		if (formsFailedToFetch.length) {
+			yield put(removeCandidates(formsFailedToFetch));
+		}
 	}
 	return candidatesToCompleteFilling;
 }
 
-function* getCandidatesInfoOnLoadSaga() {
+export function* getCandidatesInfoOnLoadSaga() {
 	const api = yield getContext('api');
-	const { candidates, currentCandidate } = yield select(getCandidatesState);
+	const { candidates, currentCandidate } = yield selectCandidatesWithUnderflowCheck(FORMS_INFO_ARRAY_SIZE);
+
 	const candidateFormsIdToLoad = candidates.slice(currentCandidate, currentCandidate + FORMS_INFO_ARRAY_SIZE);
 	yield put(startRequest(Requests.getCandidatesInfoOnLoad));
 	try {
 		const res = yield call(api.get, `${apiRoutes.candidates.info}`, { params: { ids: candidateFormsIdToLoad } });
 		let receivedForms = res.data.data;
+
+		yield put(completeRequestStep(receivedForms.length));
 		const notFoundFormsNumber = res.data.not_found.length;
+
 		if (notFoundFormsNumber) {
+			yield put(removeCandidates(res.data.not_found));
 			const additionallyReceivedForms = yield getCandidatesToCompleteFilling(notFoundFormsNumber);
 			receivedForms = receivedForms.concat(additionallyReceivedForms);
 		}
+
 		yield all([put(successRequest(Requests.getCandidatesInfoOnLoad)), put(addCandidatesInfo(receivedForms))]);
 	} catch (e) {
 		yield put(failRequest({ request: Requests.getCandidatesInfoOnLoad, error: e.response.data.message }));

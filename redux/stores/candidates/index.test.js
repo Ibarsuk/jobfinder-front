@@ -1,4 +1,3 @@
-import { FORMS_INFO_ARRAY_SIZE } from 'utils/const';
 import reducer, { addCandidates, initialState } from './index';
 
 describe(`Candidates reducer works correctly`, () => {
@@ -8,7 +7,7 @@ describe(`Candidates reducer works correctly`, () => {
 
 			const newCandidates = [45, 856, 442, 765];
 
-			const expectedState = { ...initialState, candidates: newCandidates, currentRequestCandidate: FORMS_INFO_ARRAY_SIZE };
+			const expectedState = { ...initialState, candidates: newCandidates };
 
 			expect(reducer(state, addCandidates(newCandidates))).toEqual(expectedState);
 		});
