@@ -23,3 +23,11 @@ export const RequestStatus = {
 	SUCCESS: `SUCCESS`,
 	FAILED: `FAILED`,
 };
+
+export const LocalStorageKey = {
+	tokens: `tokens`,
+	user: `user`,
+	candidatesLoadedTime: `candidatesLoadedTime`,
+	candidates: `candidates`,
+	currentCandidate: `currentCandidate`,
+};
