@@ -1,6 +1,7 @@
 import defaultRequestState from 'redux/stores/requests/defaultRequestState';
-import { MIN_ALLOWED_AGE } from './const';
+import { FETCHED_DATA_DAYS_RELEVANCE, MIN_ALLOWED_AGE } from './const';
 import Requests from '../redux/stores/requests/Requests';
+import LocalStorage from './localStorage';
 
 export const getMinAllowedBirthDate = () => {
 	const current = new Date();
@@ -20,3 +21,14 @@ export const getFormData = values =>
 		formData.append(field, value);
 		return formData;
 	}, new FormData());
+
+export const checkIfDataExpired = key => {
+	const lastUpdateTime = LocalStorage.read(key);
+
+	if (!lastUpdateTime) {
+		return false;
+	}
+
+	const currentTime = +new Date();
+	return currentTime - lastUpdateTime > 1000 * 3600 * 24 * FETCHED_DATA_DAYS_RELEVANCE;
+};

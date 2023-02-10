@@ -4,6 +4,8 @@ export const FORMS_INFO_ARRAY_SIZE = 5;
 
 export const MAX_BACK_STEPS_ALLOWED = 3;
 
+export const FETCHED_DATA_DAYS_RELEVANCE = 3;
+
 export const StatusCode = {
 	OK: 200,
 	CREATED: 201,
