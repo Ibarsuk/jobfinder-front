@@ -35,8 +35,6 @@ const candidatesSlice = createSlice({
 			state.fetchedCandidates.push(...action.payload);
 		},
 
-		addCandidateInfo() {},
-
 		completeRequestStep(state, { payload = 1 }) {
 			state.currentRequestCandidate += payload;
 		},
@@ -51,10 +49,37 @@ const candidatesSlice = createSlice({
 			state.currentRequestCandidate = action.payload.currentCandidate;
 			state.isStoreInitialized = true;
 		},
+
+		setNextCandidate(state) {
+			state.currentCandidate++;
+		},
+
+		fetchNextCandidate(state) {
+			state.runningRequests++;
+			state.currentRequestCandidate++;
+		},
+
+		setPrevCandidate(state) {
+			state.currentCandidate--;
+		},
+
+		completeRunningRequests(state, { payload = 1 }) {
+			state.runningRequests -= payload;
+		},
 	},
 });
 
 export * from './selectors';
-export const { setCandidates, initCandidatesState, addCandidates, addCandidatesInfo, completeRequestStep, removeCandidates } =
-	candidatesSlice.actions;
+export const {
+	setCandidates,
+	initCandidatesState,
+	addCandidates,
+	addCandidatesInfo,
+	completeRequestStep,
+	removeCandidates,
+	setNextCandidate,
+	setPrevCandidate,
+	completeRunningRequests,
+	fetchNextCandidate,
+} = candidatesSlice.actions;
 export default candidatesSlice.reducer;

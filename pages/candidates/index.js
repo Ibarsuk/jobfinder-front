@@ -1,8 +1,9 @@
 import Page, { PrivateType } from 'components/Page';
+import useRequest from 'hooks/useRequest';
 import { useCallback, useEffect, useRef } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Spinner } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCandidates, fetchCandidates, getCandidatesInfo, getCandidatesInfoOnLoad } from 'redux/sagas/candidates/actions';
+import { addCandidates, fetchCandidates, getCandidatesInfoOnLoad, setNextCandidate } from 'redux/sagas/candidates/actions';
 import {
 	getCandidates,
 	getCurrentCandidate,
@@ -10,7 +11,10 @@ import {
 	getCurrentRequestCandidate,
 	getIfCandidatesInitialized,
 	getRunningRequestsNumber,
+	setPrevCandidate,
 } from 'redux/stores/candidates';
+import Requests from 'redux/stores/requests/Requests';
+import { RequestStatus } from 'utils/const';
 
 const Candidates = () => {
 	const dispatch = useDispatch();
@@ -23,9 +27,7 @@ const Candidates = () => {
 	const isStoreInitialized = useSelector(getIfCandidatesInitialized);
 	const runningRequestsNumber = useSelector(getRunningRequestsNumber);
 
-	const handleFetchCandidates = useCallback(() => {
-		dispatch(fetchCandidates());
-	}, []);
+	const getInfoOnLoadRequest = useRequest(Requests.getCandidatesInfoOnLoad);
 
 	useEffect(() => {
 		if (isStoreInitialized && !candidates.length) {
@@ -40,6 +42,18 @@ const Candidates = () => {
 		}
 	}, [isStoreInitialized, candidates]);
 
+	const handleFetchCandidates = useCallback(() => {
+		dispatch(fetchCandidates());
+	}, []);
+
+	const handleNextCandidateButtonClick = useCallback(() => {
+		dispatch(setNextCandidate());
+	}, []);
+
+	const handlePrevCandidateButtonClick = useCallback(() => {
+		dispatch(setPrevCandidate());
+	}, []);
+
 	if (!isStoreInitialized) {
 		return null;
 	}
@@ -47,18 +61,22 @@ const Candidates = () => {
 	return (
 		<Page privateType={PrivateType.PRIVATE} title="Candidates">
 			<Button onClick={handleFetchCandidates}>Fetch Candidates</Button>
+			{getInfoOnLoadRequest.status === RequestStatus.SUCCESS ? (
+				<Row>
+					<Col>
+						<Button onClick={handlePrevCandidateButtonClick}>&larr;</Button>
+					</Col>
 
-			<Row>
-				<Col>
-					<Button>&larr;</Button>
-				</Col>
+					<Col>{currentCandidateInfo && <p>{currentCandidateInfo.id}</p>}</Col>
 
-				<Col>{currentCandidateInfo && <p>{currentCandidateInfo.id}</p>}</Col>
+					<Col>
+						<Button onClick={handleNextCandidateButtonClick}>&rarr;</Button>
+					</Col>
+				</Row>
+			) : (
+				<Spinner variant="info" animation="border" />
+			)}
 
-				<Col>
-					<Button>&rarr;</Button>
-				</Col>
-			</Row>
 			<p>{currentCandidate && currentCandidate.id}</p>
 
 			<p>{candidates && candidates.join(`, `)}</p>

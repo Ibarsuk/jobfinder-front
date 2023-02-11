@@ -6,8 +6,11 @@ import {
 	addCandidatesInfo,
 	assignCurrentCandidate,
 	completeRequestStep,
+	completeRunningRequests,
+	fetchNextCandidate,
 	getCandidatesState,
 	removeCandidates,
+	setNextCandidate as setNextStateCandidate,
 } from 'redux/stores/candidates';
 import { failRequest, startRequest, successRequest } from 'redux/stores/requests';
 import Requests from 'redux/stores/requests/Requests';
@@ -120,12 +123,39 @@ function* createCandidateSaga(action) {
 	}
 }
 
+function* fetchNextCandidateSaga() {
+	const api = yield getContext('api');
+	const state = yield select(getCandidatesState);
+	yield put(fetchNextCandidate());
+
+	try {
+		const res = yield call(api.get, `${apiRoutes.candidates.info}`, {
+			params: { ids: [state.candidates[state.currentRequestCandidate]] },
+		});
+
+		yield put(completeRunningRequests());
+		if (!res.data.data.length) {
+			return yield fetchNextCandidateSaga();
+		}
+
+		yield put(addCandidatesInfo(res.data.data));
+	} catch (e) {
+		yield put(completeRunningRequests());
+	}
+}
+
+function* setNextCandidateSaga() {
+	yield put(setNextStateCandidate());
+	yield fetchNextCandidateSaga();
+}
+
 function* candidatesSaga() {
 	yield all([
 		takeLatest(Action.GET_CANDIDATES_IFO_ON_LOAD, getCandidatesInfoOnLoadSaga),
 		takeLatest(Action.GET_CANDIDATE_INFO, getCandidatesInfoSaga),
 		takeLatest(Action.ADD_CANDIDATES, addCandidatesSaga),
 		takeLatest(Action.CREATE_CANDIDATE, createCandidateSaga),
+		takeLatest(Action.SET_NEXT_CANDIDATE, setNextCandidateSaga),
 	]);
 }
 

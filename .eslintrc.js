@@ -33,6 +33,7 @@ module.exports = {
 		},
 	},
 	rules: {
+		'no-plusplus': 'off',
 		'react-hooks/rules-of-hooks': 'error',
 		'react-hooks/exhaustive-deps': 'warn',
 		'import/prefer-default-export': 'off',
