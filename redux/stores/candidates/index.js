@@ -31,8 +31,8 @@ const candidatesSlice = createSlice({
 			state.currentCandidate = MAX_BACK_STEPS_ALLOWED;
 		},
 
-		addCandidatesInfo(state, action) {
-			state.fetchedCandidates.push(...action.payload);
+		addCandidatesInfo(state, { payload }) {
+			state.fetchedCandidates.push(...payload);
 		},
 
 		completeRequestStep(state, { payload = 1 }) {
@@ -51,7 +51,11 @@ const candidatesSlice = createSlice({
 		},
 
 		setNextCandidate(state) {
-			state.currentCandidate++;
+			if (state.currentCandidate < MAX_BACK_STEPS_ALLOWED) {
+				state.currentCandidate++;
+			} else {
+				state.fetchedCandidates.shift();
+			}
 		},
 
 		fetchNextCandidate(state) {

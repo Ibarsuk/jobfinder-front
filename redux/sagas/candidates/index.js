@@ -1,4 +1,4 @@
-import { all, call, put, getContext, takeLatest, select } from 'redux-saga/effects';
+import { all, call, put, getContext, takeLatest, select, takeEvery } from 'redux-saga/effects';
 
 import apiRoutes from 'utils/apiRoutes';
 import {
@@ -155,7 +155,7 @@ function* candidatesSaga() {
 		takeLatest(Action.GET_CANDIDATE_INFO, getCandidatesInfoSaga),
 		takeLatest(Action.ADD_CANDIDATES, addCandidatesSaga),
 		takeLatest(Action.CREATE_CANDIDATE, createCandidateSaga),
-		takeLatest(Action.SET_NEXT_CANDIDATE, setNextCandidateSaga),
+		takeEvery(Action.SET_NEXT_CANDIDATE, setNextCandidateSaga),
 	]);
 }
 
