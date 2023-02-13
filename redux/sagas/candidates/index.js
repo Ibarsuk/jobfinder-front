@@ -129,12 +129,14 @@ function* fetchNextCandidateSaga() {
 	yield put(fetchNextCandidate());
 
 	try {
+		const fetchingCandidateId = state.candidates[state.currentRequestCandidate];
 		const res = yield call(api.get, `${apiRoutes.candidates.info}`, {
-			params: { ids: [state.candidates[state.currentRequestCandidate]] },
+			params: { ids: [fetchingCandidateId] },
 		});
 
 		yield put(completeRunningRequests());
 		if (!res.data.data.length) {
+			yield all([put(removeCandidates([fetchingCandidateId])), put(completeRequestStep(-1))]);
 			return yield fetchNextCandidateSaga();
 		}
 
