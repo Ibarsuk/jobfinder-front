@@ -8,9 +8,9 @@ import {
 	getCandidates,
 	getCurrentCandidate,
 	getCurrentCandidateInfo,
-	getCurrentRequestCandidate,
+	getIfBackStepAllowed,
 	getIfCandidatesInitialized,
-	getRunningRequestsNumber,
+	getIfNextStepAllowed,
 	setPrevCandidate,
 } from 'redux/stores/candidates';
 import Requests from 'redux/stores/requests/Requests';
@@ -22,10 +22,10 @@ const Candidates = () => {
 
 	const candidates = useSelector(getCandidates);
 	const currentCandidate = useSelector(getCurrentCandidate);
-	const currentRequestCandidate = useSelector(getCurrentRequestCandidate);
 	const currentCandidateInfo = useSelector(getCurrentCandidateInfo);
 	const isStoreInitialized = useSelector(getIfCandidatesInitialized);
-	const runningRequestsNumber = useSelector(getRunningRequestsNumber);
+	const isNextStepAllowed = useSelector(getIfNextStepAllowed);
+	const isBackStepAllowed = useSelector(getIfBackStepAllowed);
 
 	const getInfoOnLoadRequest = useRequest(Requests.getCandidatesInfoOnLoad);
 
@@ -63,14 +63,14 @@ const Candidates = () => {
 			<Button onClick={handleFetchCandidates}>Fetch Candidates</Button>
 			{getInfoOnLoadRequest.status === RequestStatus.SUCCESS ? (
 				<Row>
-					<Col>
-						<Button onClick={handlePrevCandidateButtonClick}>&larr;</Button>
-					</Col>
+					<Col>{isBackStepAllowed && <Button onClick={handlePrevCandidateButtonClick}>&#60;-</Button>}</Col>
 
 					<Col>{currentCandidateInfo && <p>{currentCandidateInfo.id}</p>}</Col>
 
 					<Col>
-						<Button onClick={handleNextCandidateButtonClick}>&rarr;</Button>
+						<Button onClick={handleNextCandidateButtonClick} disabled={!isNextStepAllowed}>
+							{isNextStepAllowed ? `->` : <Spinner variant="info" animation="border" />}
+						</Button>
 					</Col>
 				</Row>
 			) : (

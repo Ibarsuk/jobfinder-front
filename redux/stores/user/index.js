@@ -12,6 +12,7 @@ const initialState = {
 		lastName: null,
 		birthDate: null,
 		email: null,
+		roles: [],
 	},
 };
 
