@@ -4,7 +4,7 @@ import { checkUserRoleFactory } from '../user';
 
 const vipRoleSelector = checkUserRoleFactory();
 
-export const getCurrentCandidate = state => state.candidates.currrentCandidate;
+export const getCurrentCandidate = state => state.candidates.currentCandidate;
 
 export const getCandidates = state => state.candidates.candidates;
 

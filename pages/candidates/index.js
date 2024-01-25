@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addCandidates, fetchCandidates, getCandidatesInfoOnLoad, setNextCandidate } from 'redux/sagas/candidates/actions';
 import {
 	getCandidates,
-	getCurrentCandidate,
 	getCurrentCandidateInfo,
 	getIfBackStepAllowed,
 	getIfCandidatesInitialized,
@@ -21,7 +20,6 @@ const Candidates = () => {
 	const isInfoLoaded = useRef(false);
 
 	const candidates = useSelector(getCandidates);
-	const currentCandidate = useSelector(getCurrentCandidate);
 	const currentCandidateInfo = useSelector(getCurrentCandidateInfo);
 	const isStoreInitialized = useSelector(getIfCandidatesInitialized);
 	const isNextStepAllowed = useSelector(getIfNextStepAllowed);
@@ -76,8 +74,6 @@ const Candidates = () => {
 			) : (
 				<Spinner variant="info" animation="border" />
 			)}
-
-			<p>{currentCandidate && currentCandidate.id}</p>
 
 			<p>{candidates && candidates.join(`, `)}</p>
 		</Page>

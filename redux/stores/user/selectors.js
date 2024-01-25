@@ -11,9 +11,8 @@ export const getUser = state => state.user.user;
 export const getUserRoles = state => state.user.user.roles;
 
 export const checkUserRole = createSelector(
-	[getUserRoles],
-	(_state, role) => role,
-	(roles, role) => roles.includes(role)
+	[getUserRoles, (_state, role) => role],
+	(roles, role) => roles && roles.includes(role)
 );
 
 export const checkUserRoleFactory = () => checkUserRole;
