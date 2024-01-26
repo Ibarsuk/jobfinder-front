@@ -7,4 +7,6 @@ export default {
 	getCompanies: `getCompanies`,
 	getUser: `getUser`,
 	getCandidatesInfoOnLoad: `GetCandidatesInfoOnLoad`,
+	setCandidateFormActive: `setCandidateFormActive`,
+	setCompanyFormActive: `setCompanyFormActive`,
 };

@@ -40,9 +40,13 @@ const userSlice = createSlice({
 		setUser(state, action) {
 			state.user = action.payload;
 		},
+
+		setUserFormActive(state, { payload }) {
+			state.user[payload.formType].active = payload.active;
+		},
 	},
 });
 
 export * from './selectors';
-export const { initUserState, auth, logout, setUser } = userSlice.actions;
+export const { initUserState, auth, logout, setUser, setUserFormActive } = userSlice.actions;
 export default userSlice.reducer;

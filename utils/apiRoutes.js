@@ -8,9 +8,11 @@ export default {
 	candidates: {
 		index: `candidates`,
 		info: `candidates/info`,
+		active: 'candidates/active',
 	},
 	companies: {
 		index: `companies`,
 		info: `companies/info`,
+		active: `companies/active`,
 	},
 };

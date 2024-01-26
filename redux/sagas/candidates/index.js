@@ -18,6 +18,7 @@ import routes from 'utils/routes';
 import { redirect } from 'redux/globalActions';
 import { getFormData } from 'utils/util';
 import { FORMS_INFO_ARRAY_SIZE } from 'utils/const';
+import { setUserFormActive } from 'redux/stores/user';
 import Action from './actions';
 
 function* getCandidatesInfoSaga(action) {
@@ -123,6 +124,21 @@ function* createCandidateSaga(action) {
 	}
 }
 
+function* setUserCandidateActive({ payload }) {
+	const api = yield getContext('api');
+	yield put(startRequest(Requests.setCandidateFormActive));
+	try {
+		const res = yield call(api.put, apiRoutes.candidates.active, { active: payload });
+
+		yield all([
+			put(successRequest(Requests.setCandidateFormActive)),
+			put(setUserFormActive({ active: res.data.active, formType: `candidate` })),
+		]);
+	} catch (e) {
+		yield put(failRequest({ request: Requests.setCandidateFormActive, error: e.response?.data.message || e.message }));
+	}
+}
+
 function* fetchNextCandidateSaga() {
 	const api = yield getContext('api');
 	const state = yield select(getCandidatesState);
@@ -157,6 +173,7 @@ function* candidatesSaga() {
 		takeLatest(Action.GET_CANDIDATE_INFO, getCandidatesInfoSaga),
 		takeLatest(Action.ADD_CANDIDATES, addCandidatesSaga),
 		takeLatest(Action.CREATE_CANDIDATE, createCandidateSaga),
+		takeLatest(Action.SET_CANDIDATE_ACTIVE, setUserCandidateActive),
 		takeEvery(Action.SET_NEXT_CANDIDATE, setNextCandidateSaga),
 	]);
 }

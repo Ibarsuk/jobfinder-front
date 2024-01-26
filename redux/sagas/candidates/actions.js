@@ -5,6 +5,7 @@ const Action = {
 	GET_CANDIDATE_INFO: `GET_CANDIDATE_INFO`,
 	GET_CANDIDATES_IFO_ON_LOAD: `GET_CANDIDATES_INFO_ON_LOAD`,
 	SET_NEXT_CANDIDATE: `SET_NEXT_CANDIDATE`,
+	SET_CANDIDATE_ACTIVE: `SET_CANDIDATE_ACTIVE`,
 };
 
 export const fetchCandidate = payload => ({ type: Action.FETCH_CANDIDATE, payload });
@@ -18,5 +19,7 @@ export const getCandidateInfo = () => ({ type: Action.GET_CANDIDATE_INFO });
 export const getCandidatesInfoOnLoad = () => ({ type: Action.GET_CANDIDATES_IFO_ON_LOAD });
 
 export const setNextCandidate = () => ({ type: Action.SET_NEXT_CANDIDATE });
+
+export const setCandidateActive = payload => ({ type: Action.SET_CANDIDATE_ACTIVE, payload });
 
 export default Action;

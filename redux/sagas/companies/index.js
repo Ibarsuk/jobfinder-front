@@ -8,6 +8,7 @@ import { redirect } from 'redux/globalActions';
 import { getFormData } from 'utils/util';
 import { setCompanies } from 'redux/stores/companies';
 import Adapter from 'utils/Adapter';
+import { setUserFormActive } from 'redux/stores/user';
 import Action from './actions';
 
 function* fetchCompaniesSaga() {
@@ -35,8 +36,27 @@ function* createCompanySaga(action) {
 	}
 }
 
+function* setUserCompanyActive({ payload }) {
+	const api = yield getContext('api');
+	yield put(startRequest(Requests.setCompanyFormActive));
+	try {
+		const res = yield call(api.put, apiRoutes.companies.active, { active: payload });
+
+		yield all([
+			put(successRequest(Requests.setCompanyFormActive)),
+			put(setUserFormActive({ active: res.data.active, formType: `company` })),
+		]);
+	} catch (e) {
+		yield put(failRequest({ request: Requests.setCompanyFormActive, error: e.response?.data.message || e.message }));
+	}
+}
+
 function* companiesSaga() {
-	yield all([takeLatest(Action.FETCH_COMPANIES, fetchCompaniesSaga), takeLatest(Action.CREATE_COMPANY, createCompanySaga)]);
+	yield all([
+		takeLatest(Action.FETCH_COMPANIES, fetchCompaniesSaga),
+		takeLatest(Action.CREATE_COMPANY, createCompanySaga),
+		takeLatest(Action.SET_COMPANY_ACTIVE, setUserCompanyActive),
+	]);
 }
 
 export default companiesSaga;
